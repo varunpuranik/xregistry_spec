@@ -11,6 +11,7 @@ spellcheck:
 	tools/spellcheck */README.md */spec.md core/*.md \
 		workingdrafts/bindings/*.md \
 		workingdrafts/models/*/README.md workingdrafts/models/*/spec.md \
+		workingdrafts/models/*/samples/README.md \
 		docs/share/README.md */samples/README.md */samples/*/README.md
 	@echo
 
@@ -37,7 +38,8 @@ errorcheck:
 samplescheck:
 	@echo "Check for too verbose samples:"
 	tools/samplescheck */model.json workingdrafts/models/*/model.json \
-		*/samples/*json */samples/*/*json
+		*/samples/*json */samples/*/*json \
+		workingdrafts/models/*/samples/*json
 	@echo
 
 hrefs:
