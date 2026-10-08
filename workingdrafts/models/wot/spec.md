@@ -689,6 +689,38 @@ the [OpenUSD Artifact Registry][OpenUSD Draft] working draft defines one such
 construction — but no convention is mandated by this specification, and a
 Consumer MUST NOT assume that an id it did not assign was produced by one.
 
+Choosing an id is nonetheless easier with a convention than without one, and
+deriving it from the `wotid` keeps the two legible side by side: a person
+reading a registry path can see which authored identifier it holds, and the
+same document lands on the same id each time it is loaded. The convention the
+[samples](samples/README.md) use derives the id mechanically:
+
+1. For a URN, replace each `:` separator with a `.`, so that
+   `urn:fabrikam:lamp:42` becomes `urn.fabrikam.lamp.42`.
+2. For a URL, drop the scheme, reverse the labels of the host so that
+   documents from one origin sort together, then append the path segments,
+   again separated by `.`, so that `https://contoso.example/tm/pump` becomes
+   `example.contoso.tm.pump`.
+3. Replace any remaining character outside the id grammar with `.`, and keep
+   the result inside the 128 character limit, appending a short digest of the
+   full `wotid` where truncating would otherwise collide with another id.
+
+| `wotid` | Resource id |
+|---|---|
+| `urn:fabrikam:lamp` | `urn.fabrikam.lamp` |
+| `urn:fabrikam:lamp:42` | `urn.fabrikam.lamp.42` |
+| `https://contoso.example/tm/pump` | `example.contoso.tm.pump` |
+
+A deployment whose hosting environment constrains names more tightly, or that
+already has an identifier scheme of its own, is free to use any id the Core
+rules allow instead. The derivation is a convenience for the people and tools
+that read registry paths, not a lookup mechanism: it never has to be
+reversible, because a Consumer that holds only the authored identifier
+resolves it by querying `wotid` ([Section 5.3](#53-lookup)) rather than by
+rebuilding the id. For the same reason a registry MUST NOT reject a Resource
+id merely because it does not follow the derivation above, and MUST NOT infer
+a `wotid` from one that does.
+
 A `wotid` MUST NOT encode a revision of the document it names. Encoding one —
 for example as a `:v2` suffix appended when the document is edited — makes the
 identifier change whenever the document changes, so the registry can no longer

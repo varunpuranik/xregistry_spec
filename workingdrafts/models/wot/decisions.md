@@ -90,7 +90,9 @@ the same Resource.
 **Consequence.** A deployment MAY adopt a derivation convention of its own —
 the [OpenUSD Artifact Registry](../openusd/spec.md) working draft defines one
 — but it is a local convention, and a Consumer MUST NOT assume an id was
-produced by it.
+produced by it. Leaving the choice open does not leave it unguided: the
+specification sets out the derivation the samples use, so a deployment with
+no scheme of its own has one to adopt.
 
 See [Section 5.1](spec.md#51-wot-identifiers-and-registry-ids).
 
@@ -98,8 +100,9 @@ See [Section 5.1](spec.md#51-wot-identifiers-and-registry-ids).
 
 **Decision.** `wotid` is REQUIRED on every `thingdescription` and
 `thingmodel`, is defined in the extension model rather than left to an
-application-managed label, and SHOULD be indexed so that
-`?filter=wotid=<id>` is served without scanning.
+application-managed label, and `?filter=wotid=<id>` is expected to be served
+in time that does not grow with the size of the collection — in practice by
+indexing the attribute.
 
 **Why.** An informal label is not enforced, not validated and not indexed, so
 a resolver cannot depend on it. Defining the attribute in the model means the
